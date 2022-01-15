@@ -1,0 +1,33 @@
+defs scanner provides:[initialize read] returns:{object error} uses:[cons consatom $NIL]
+  var text
+  var index
+  entry initialize (string)
+         (progn
+           (setf text string)
+           (setf index 0))
+  def nextchar ()
+    cond { (terminated?) (progn (setf index -1) $NIL)
+           else          let [ c (aref text index) ] in (progn (incf index) c) }
+  def terminated? () (ge index (length text))
+  {
+    entry parent/read ()
+       cond { 
+              (terminated?) (send error "EOF")
+              else let [c (nextchar)] in
+                     cond {
+                            (=? "(" c)  (readlist)
+                            else       (readatom)
+                          }
+          }
+    def readlist ()
+      let [c (aref text index)] in
+      cond {(=? "(" c) let [i (readlist)] in (progn (need ")") (send (cons i $NIL) child))
+            (=? ")" c) (send "extra rpar" error)
+            else       (send (readatom) child) }
+
+    def readatom ()
+      cond {(terminated?)        (consatom pointer $NIL)
+            (next-is-character?) (consatom pointer (readatom))
+            else                 (consatom pointer $NIL)}
+  }
+ 

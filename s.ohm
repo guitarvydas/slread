@@ -1,0 +1,52 @@
+S {
+  main = applySyntactic<Header> body
+  Header = "defs" ident Provides Returns Uses
+  Provides = "provides" ":" "[" ident+ "]"
+  Returns = "returns" ":" CrossProductType
+  Uses = "uses" ":" "[" ident* "]"
+
+  CrossProductType = "{" ident+ "}"
+  body = bodyClause+
+  bodyClause
+    = applySyntactic<Var> spaces
+    | applySyntactic<Entry> spaces
+    | applySyntactic<Def> spaces
+    | expression spaces
+
+  Var = "var" ident
+  Entry = "entry" ident Params body
+  Def = "def" ident Params body
+  Let = "let" "[" ident expression "]" "in" expression
+  Cond = "cond" "{" ExpressionPair+ "else" expression "}"
+  
+  expression
+   = "{" body "}"    -- compound
+   | applySyntactic<Let>
+   | applySyntactic<Cond>
+   | sexpr
+
+  sexpr
+  = applySyntactic<NestedSexpr> -- nested
+  | atom                         -- flat
+
+  NestedSexpr = "(" sexpr* ")"
+  ExpressionPair = ~"else" expression expression
+  Params = "(" ")" -- empty
+         | "(" ident+ ")" -- args
+  atom = ident | string | gop
+
+
+  gop = ">=" | ">"
+  string = dq (~dq any)* dq
+  dq = "\""
+  ident = ~separator ~keyword identChar+ &separator
+  identChar = ~separator ~ws any
+  keyword = ("defs" | "provides" | "returns" | "uses" | "var" 
+    | "entry" | "def" | "let" | "cond" | "in") &separator
+  ws = blank | tab | nl
+  blank = " "
+  tab = "\t"
+  nl = "\n"
+  bracket = dq | "{" | "}" | "(" | ")" | "[" | "]" | "<" | ">"
+  separator = bracket | ":" | space | end
+}
