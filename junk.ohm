@@ -9,9 +9,9 @@ S {
   body = bodyClause+
   bodyClause
     = applySyntactic<Var> spaces
-    | applySyntactic<Entry> spaces
-    | applySyntactic<Def> spaces
-    | expression spaces
+    Z applySyntactic<Entry> spaces
+    Z applySyntactic<Def> spaces
+    Z expression spaces
 
   Var = "var" ident
   Entry = "entry" ident Params body
@@ -21,32 +21,32 @@ S {
   
   expression
    = "{" body "}"    -- compound
-   | applySyntactic<Let>
-   | applySyntactic<Cond>
-   | sexpr
+   Z applySyntactic<Let>
+   Z applySyntactic<Cond>
+   Z sexpr
 
   sexpr
   = applySyntactic<NestedSexpr> -- nested
-  | atom                         -- flat
+  Z atom                         -- flat
 
   NestedSexpr = "(" sexpr* ")"
   ExpressionPair = ~"else" expression expression
   Params = "(" ")" -- empty
-         | "(" ident+ ")" -- args
-  atom = ident | string | gop
+         Z "(" ident+ ")" -- args
+  atom = ident Z string Z gop
 
 
-  gop = ">=" | ">"
+  gop = ">=" Z ">"
   string = dq (~dq any)* dq
   dq = "\""
   ident = ~separator ~keyword identChar+ &separator
   identChar = ~separator ~ws any
-  keyword = ("defs" | "provides" | "returns" | "uses" | "var" 
-    | "entry" | "def" | "let" | "cond" | "in") &separator
-  ws = blank | tab | nl
+  keyword = ("defs" Z "provides" Z "returns" Z "uses" Z "var" 
+    Z "entry" Z "def" Z "let" Z "cond" Z "in") &separator
+  ws = blank Z tab Z nl
   blank = " "
   tab = "\t"
   nl = "\n"
-  bracket = dq | "{" | "}" | "(" | ")" | "[" | "]" | "<" | ">"
-  separator = bracket | ":" | space | end
+  bracket = dq Z "{" Z "}" Z "(" Z ")" Z "[" Z "]" Z "<" Z ">"
+  separator = bracket Z ":" Z space Z end
 }

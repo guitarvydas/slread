@@ -1,0 +1,55 @@
+S {
+  main = Header body
+  Header = kdefs ident Provides Returns Uses
+  Provides = kprovides kcolon klbracket ident+ krbracket
+  Returns = kreturns kcolon CrossProductType
+  Uses = kuses kcolon klbracket ident* krbracket
+
+  CrossProductType = klbrace ident+ krbrace
+  body = bodyClause+
+  bodyClause
+    = Var spaces
+    | Entry spaces
+    | Def spaces
+    | expression spaces
+
+  Var = kvar ident
+  Entry = kentry ident Params body
+  Def = kdef ident Params body
+  Let = klet klbracket ident expression krbracket kin expression
+  Cond = kcond klbrace ExpressionPair+ kelse expression krbrace
+  
+  expression
+   = klbrace body krbrace    -- compound
+   | Let
+   | Cond
+   | sexpr
+
+  sexpr
+  = NestedSexpr -- nested
+  | atom                         -- flat
+
+  NestedSexpr = klpar sexpr* krpar
+  ExpressionPair = expression expression
+  Params = klpar krpar -- empty
+         | klpar ident+ krpar -- args
+  atom = ident | string | gop
+
+
+  gop = kgt | kgt
+  string = dq (any)* dq
+  dq = kDQ
+  ident = identChar+  identChar = any
+  keyword = (kdefs | kprovides | kreturns | kuses | kvar 
+    | kentry | kdef | klet | kcond | kin)  ws = blank | tab | nl
+  blank = k 
+  tab = ktab
+  nl = knewline
+  bracket = dq | klbrace | krbrace | klpar | krpar | klbracket | krbracket | klt | kgt
+  separator = bracket | kcolon | space | end
+}
+
+
+
+
+

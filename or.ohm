@@ -1,0 +1,5 @@
+S {
+main = "Z" ws* notZ* ("Z" | end)
+ws = space
+notZ = ~"Z" any
+}

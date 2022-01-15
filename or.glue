@@ -1,0 +1,4 @@
+main [ or1 @ws1 @notWS or2 ] = [[Z]]
+ws [c] = [[]]
+notZ [c] = [[]]
+
