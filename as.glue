@@ -1,0 +1,3 @@
+main [kas klt @stuff kgt] = [[${stuff}]]
+gt [c] = [[${c}]]
+notGT [c] = [[${c}]]

@@ -1,0 +1,5 @@
+S {
+  main = dq notDQ* dq
+  dq = "\""
+  notDQ = ~dq any
+}

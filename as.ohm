@@ -1,0 +1,5 @@
+S {
+  main = "applySyntactic" "<" notGT+ ">"
+  gt = ">"
+  notGT = ~gt any
+}

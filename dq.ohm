@@ -1,0 +1,5 @@
+S {
+main = dq backslash dq dq any
+dq = "\""
+backslash = "\\"
+}

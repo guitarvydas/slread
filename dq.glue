@@ -1,0 +1,3 @@
+main [dq1 backslash dq2 dq3 any] = [[kDQ${any}]]
+dq [c] = [[]]
+backslash [c] = [[]]

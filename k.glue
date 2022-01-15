@@ -1,0 +1,4 @@
+main [dq1 @notDQ dq2] = [[k${notDQ}]]
+dq [c] = [[${c}]]
+notDQ [c] = [[${c}]]
+

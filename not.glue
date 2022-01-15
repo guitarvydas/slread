@@ -1,0 +1,3 @@
+  main [ksq @notBlank @blanks] = [[]]
+  blank [c] = [[]]
+  notBlank [c] = [[]]

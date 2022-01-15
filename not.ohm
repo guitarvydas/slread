@@ -1,0 +1,5 @@
+S {
+  main = "~" notBlank* blank+
+  blank = " "
+  notBlank = ~blank any
+}
