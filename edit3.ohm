@@ -1,23 +1,23 @@
 S {
-  Main = ident "{" Rule+ "}"
-  Rule = RuleDef "=" RuleBody
+OhmSpecification = ident "{" RuleDef+ "}"
+RuleDef = RuleDefIdent "=" MatchBody
+MatchBody = SingleRule AltLeg*
 
-  RuleBody = RuleLeg+
-  RuleLeg
-    = "|" SubMatch+ Tag?
-    |     SubMatch+ Tag?
+AltLeg = "|" SingleRule
+SingleRule = PrimaryOp+ Tag?
 
-  SubMatch
-    = "(" Item+ ")" op? -- parenthesized
-    | Item
-    
-  Item = RuleItem  op?        -- rulecall
+PrimaryOp = Primary op?
 
-  RuleCall = (string | RuleRef) op?
+Primary
+  = "(" MatchBody ")" -- nested
+  | string             -- string
+  | RuleRefIdent       -- ref
 
-  Tag = "--" RuleRef
-RuleDef = ident &"="
-RuleRef = ident ~"="
+
+Tag = "--" TagIdent
+RuleDefIdent = ident &"="
+RuleRefIdent = ident ~"="
+TagIdent = ident ~"="
 op = "+" | "*" | "?"
 ident = letter+
 string = dq (~dq any)* dq
