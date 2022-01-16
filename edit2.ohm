@@ -4,15 +4,17 @@ S {
   item 
   = "(" item+ ")"  ws* op? ws* -- parenthesized
   | item ws* op? ws* -- withop
-  | itembody tag? ws* -- unparenthesized
+  | itembody applySyntactic<Tag>? ws* -- unparenthesized
   itembody
     = "|" ws* itemident op? ws* -- or
     | itemident op? ws*     -- and
   op = "+" | "*" | "?"
   
-  tag = "--" ws* itemident
-ruleident = ident ws* &"="
-itemident = ident ws* ~"="
+  Tag = "--" itemident
+ruleident = applySyntactic<Ruleident>
+Ruleident = ident &"="
+itemident = applySyntactic<Itemident>
+Itemident = ident ~"="
 ident = letter+ ws*
 tEQ = "=" ws*
 ws = space
