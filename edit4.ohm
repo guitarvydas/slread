@@ -13,10 +13,11 @@ FormalParameterList = "<" RefName CommaName ">"
 Description = "(" commentText ")"
 CommaName = ("," RefName)+
 
-Expr = ItemSequence Alternate?
-Alternate = ("|" ItemSequence Tag?)+
-Tag = "--" TagName
+Expr (Expr) = TaggedItemSequence (Alternate+)?
+Alternate (Alternate) = "|" TaggedItemSequence
+Tag (tag) = "--" TagName
 
+TaggedItemSequence = ItemSequence Tag?
 ItemSequence = Item+
 Item = Lexification
 Lexification = "#"? Prefixed
@@ -33,7 +34,7 @@ NestedExpr = "(" Expr ")"
 
 ActualParameterList = "<" Expr CommaExpr? ">"
 CommaExpr = ("," Expr)+
-TagName = name
+TagName = name ~defineOp
 RefName = name ~defineOp
 DefName = name
 
@@ -42,7 +43,7 @@ dq = "\""
 notDQ = (~dq any)+
 
 name = nameFirst nameRest?
-nameFirst = letter | "_"
+nameFirst (nameFirst) = letter | "_"
 nameRest = (digit | nameFirst)+
 
 commentText = (~nl any)+ eol
