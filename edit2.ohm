@@ -1,6 +1,6 @@
 S {
   Main = ident "{" Rule+ "}"
-  Rule = ruleident "=" Item+
+  Rule = Ruleident "=" Item+
   
   Item 
   = "(" Item+ ")" op? -- parenthesized
@@ -8,14 +8,12 @@ S {
   | Itembody Tag? -- unparenthesized
   
   Itembody
-    = "|" itemident op? -- or
-    | itemident op?     -- and
+    = "|" Itemident op? -- or
+    | Itemident op?     -- and
   op = "+" | "*" | "?"
   
-  Tag = "--" itemident
-ruleident = applySyntactic<Ruleident>
+  Tag = "--" Itemident
 Ruleident = ident &"="
-itemident = applySyntactic<Itemident>
 Itemident = ident ~"="
 ident = letter+
 }
