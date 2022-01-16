@@ -1,0 +1,5 @@
+Ohm {
+Grammar = name Inheritance "{" Rule "}"
+Inheritance = "<:" name
+
+}
