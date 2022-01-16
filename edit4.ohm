@@ -1,40 +1,41 @@
 Ohm {
-Grammar = defname Inheritance "{" Rule+ "}"
-Inheritance = "<:" defname
-Rule = defname FormalParameterList? Description? DefineOp RuleBody
+Grammar = DefName Inheritance? "{" Rule+ "}"
+Inheritance = "<:" DefName
+Rule = DefName FormalParameterList? Description? defineOp RuleBody
 Comment = CommentToEOL | MultiLineComment
-DefineOp = "=" | "+=" | ":="
+defineOp = "=" | "+=" | ":="
 RuleBody = Expr Tag?
 SingleLineComment = "//" CommentToEOL
 MultiLineComment = "/*" CommentToEOL+ "*/"
 CommentToEOL = #(commentText eol)
 
-FormalParameterList = "<" refname CommaName ">"
+FormalParameterList = "<" RefName CommaName ">"
 Description = "(" commentText ")"
-CommaName = "," refname
+CommaName = ("," RefName)+
 
 Expr = ItemSequence Alternate?
-Alternate = "|" ItemSequence Tag?
+Alternate = ("|" ItemSequence Tag?)+
 Tag = "--" tagname
 
-ItemSequence = Item
+ItemSequence = Item+
 Item = Lexification
-Lexification = "#" Prefixed
+Lexification = "#"? Prefixed
 Prefixed = Prefix? Suffixed
-Prefx = "&" | "~"
+Prefix = "&" | "~"
 
 Suffixed = Primary Suffix?
 Suffix = "*" | "+" | "?"
 Primary = TerminalRange | Terminal | NestedExpr | RuleApplication
 Terminal = string
 TerminalRange = Terminal ".." Terminal
-RuleApplication = refname ActualParameterList?
+RuleApplication = RefName ActualParameterList?
 NestedExpr = "(" Expr ")"
 
 ActualParameterList = "<" Expr CommaExpr? ">"
-CommaExpr = "," Expr
-refname = name
-defname = name ~DefineOp
+CommaExpr = ("," Expr)+
+tagname = name
+RefName = name ~defineOp
+DefName = name
 
 string = dq notDQ? dq
 dq = "\""
@@ -44,7 +45,8 @@ name = nameFirst nameRest?
 nameFirst = letter | "_"
 nameRest = (digit | nameFirst)+
 
-commentText = (~eol)+ eol
+commentText = (~nl any)+ eol
 
-eol = ("\n" | end)
+eol = (nl | end)
+nl = "\n"
 }
