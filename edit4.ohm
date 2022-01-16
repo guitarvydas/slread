@@ -38,9 +38,14 @@ TagName = name ~defineOp
 RefName = name ~defineOp
 DefName = name
 
-string = dq notDQ? dq
+string = dq (stringChar+)? dq
 dq = "\""
-notDQ = (~dq any)+
+stringChar
+  = "\\" "n" -- newline
+  | "\\" "t" -- tab
+  | "\\" "\"" -- dquote
+  | notDQ    -- other
+notDQ = ~dq any
 
 name = nameFirst nameRest?
 nameFirst (nameFirst) = letter | "_"
