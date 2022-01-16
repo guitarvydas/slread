@@ -1,0 +1,50 @@
+Ohm {
+Grammar = defname Inheritance "{" Rule+ "}"
+Inheritance = "<:" defname
+Rule = defname FormalParameterList? Description? DefineOp RuleBody
+Comment = CommentToEOL | MultiLineComment
+DefineOp = "=" | "+=" | ":="
+RuleBody = Expr Tag?
+SingleLineComment = "//" CommentToEOL
+MultiLineComment = "/*" CommentToEOL+ "*/"
+CommentToEOL = #(commentText eol)
+
+FormalParameterList = "<" refname CommaName ">"
+Description = "(" commentText ")"
+CommaName = "," refname
+
+Expr = ItemSequence Alternate?
+Alternate = "|" ItemSequence Tag?
+Tag = "--" tagname
+
+ItemSequence = Item
+Item = Lexification
+Lexification = "#" Prefixed
+Prefixed = Prefix? Suffixed
+Prefx = "&" | "~"
+
+Suffixed = Primary Suffix?
+Suffix = "*" | "+" | "?"
+Primary = TerminalRange | Terminal | NestedExpr | RuleApplication
+Terminal = string
+TerminalRange = Terminal ".." Terminal
+RuleApplication = refname ActualParameterList?
+NestedExpr = "(" Expr ")"
+
+ActualParameterList = "<" Expr CommaExpr? ">"
+CommaExpr = "," Expr
+refname = name
+defname = name ~DefineOp
+
+string = dq notDQ? dq
+dq = "\""
+notDQ = (~dq any)+
+
+name = nameFirst nameRest?
+nameFirst = letter | "_"
+nameRest = (digit | nameFirst)+
+
+commentText = (~eol)+ eol
+
+eol = ("\n" | end)
+}
