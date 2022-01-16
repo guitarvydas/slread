@@ -15,7 +15,7 @@ CommaName = ("," RefName)+
 
 Expr = ItemSequence Alternate?
 Alternate = ("|" ItemSequence Tag?)+
-Tag = "--" tagname
+Tag = "--" TagName
 
 ItemSequence = Item+
 Item = Lexification
@@ -33,7 +33,7 @@ NestedExpr = "(" Expr ")"
 
 ActualParameterList = "<" Expr CommaExpr? ">"
 CommaExpr = ("," Expr)+
-tagname = name
+TagName = name
 RefName = name ~defineOp
 DefName = name
 
