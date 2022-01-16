@@ -1,25 +1,33 @@
 S {
-OhmSpecification = ident "{" RuleDef+ "}"
-RuleDef = RuleDefIdent "=" MatchBody
+OhmSpecification = name "{" RuleDef+ "}"
+RuleDef = RuleDefName "=" MatchBody
 MatchBody = SingleRule AltLeg*
 
 AltLeg = "|" SingleRule
 SingleRule = PrimaryOp+ Tag?
 
-PrimaryOp = Primary op?
+PrimaryOp = Parameterized op?
 
 Primary
   = "(" MatchBody ")" -- nested
   | string             -- string
-  | RuleRefIdent       -- ref
+  | RuleRefName       -- ref
 
+Parameterized
+  = RuleRefName Parameter?
 
-Tag = "--" TagIdent
-RuleDefIdent = ident &"="
-RuleRefIdent = ident ~"="
-TagIdent = ident ~"="
+Parameter = "<" ParameterList ">"
+
+ParameterList = name CommaName*
+
+CommaName = "," PrimaryOp
+
+Tag = "--" TagName
+RuleDefName = name &"="
+RuleRefName = name ~"="
+TagName = name ~"="
 op = "+" | "*" | "?"
-ident = letter+
+name = letter+
 string = dq (~dq any)* dq
 dq = "\""
 }
