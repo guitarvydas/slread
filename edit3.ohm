@@ -1,0 +1,26 @@
+S {
+  Main = ident "{" Rule+ "}"
+  Rule = RuleDef "=" RuleBody
+
+  RuleBody = RuleLeg+
+  RuleLeg
+    = "|" SubMatch+ Tag?
+    |     SubMatch+ Tag?
+
+  SubMatch
+    = "(" Item+ ")" op? -- parenthesized
+    | Item
+    
+  Item = RuleItem  op?        -- rulecall
+
+  RuleCall = (string | RuleRef) op?
+
+  Tag = "--" RuleRef
+RuleDef = ident &"="
+RuleRef = ident ~"="
+op = "+" | "*" | "?"
+ident = letter+
+string = dq (~dq any)* dq
+dq = "\""
+}
+
