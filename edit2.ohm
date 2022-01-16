@@ -1,13 +1,15 @@
 S {
-  main = ident "{" ws* rule+ ws* "}" ws*
-  rule = ruleident tEQ item+
-  item 
-  = "(" item+ ")"  ws* op? ws* -- parenthesized
-  | item ws* op? ws* -- withop
-  | itembody applySyntactic<Tag>? ws* -- unparenthesized
-  itembody
-    = "|" ws* itemident op? ws* -- or
-    | itemident op? ws*     -- and
+  Main = ident "{" Rule+ "}"
+  Rule = ruleident "=" Item+
+  
+  Item 
+  = "(" Item+ ")" op? -- parenthesized
+  | Item op? -- withop
+  | Itembody Tag? -- unparenthesized
+  
+  Itembody
+    = "|" itemident op? -- or
+    | itemident op?     -- and
   op = "+" | "*" | "?"
   
   Tag = "--" itemident
@@ -15,7 +17,5 @@ ruleident = applySyntactic<Ruleident>
 Ruleident = ident &"="
 itemident = applySyntactic<Itemident>
 Itemident = ident ~"="
-ident = letter+ ws*
-tEQ = "=" ws*
-ws = space
+ident = letter+
 }
