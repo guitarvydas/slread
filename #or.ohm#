@@ -1,5 +1,0 @@
-S {
-main = "|" ws* notWS* ws* "|"
-ws = space
-notWS = ~ws any
-}

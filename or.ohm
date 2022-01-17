@@ -1,5 +1,5 @@
 S {
-main = "Z" ws* notZ* ("Z" | end)
+main = "|" ws* notWS* ws* "|"
 ws = space
-notZ = ~"Z" any
+notWS = ~ws any
 }

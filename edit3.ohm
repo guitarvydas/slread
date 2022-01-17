@@ -1,0 +1,34 @@
+S {
+OhmSpecification = name "{" RuleDef+ "}"
+RuleDef = RuleDefName "=" MatchBody
+MatchBody = SingleRule AltLeg*
+
+AltLeg = "|" SingleRule
+SingleRule = PrimaryOp+ Tag?
+
+PrimaryOp = Parameterized op?
+
+Primary
+  = "(" MatchBody ")" -- nested
+  | string             -- string
+  | RuleRefName       -- ref
+
+Parameterized
+  = RuleRefName Parameter?
+
+Parameter = "<" ParameterList ">"
+
+ParameterList = name CommaName*
+
+CommaName = "," PrimaryOp
+
+Tag = "--" TagName
+RuleDefName = name &"="
+RuleRefName = name ~"="
+TagName = name ~"="
+op = "+" | "*" | "?"
+name = letter+
+string = dq (~dq any)* dq
+dq = "\""
+}
+
