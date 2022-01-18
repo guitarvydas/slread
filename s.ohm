@@ -39,7 +39,10 @@ S {
 
 
   gop = ">=" | ">"
-  string = dq (~dq any)* dq
+  string
+    = dq "(" dq -- lpar
+    | dq ")" dq -- rpar
+    | dq (~dq any)* dq -- other
   dq = "\""
   ident = ~separator ~keyword identChar+ &separator
   identChar = ~separator ~ws any
