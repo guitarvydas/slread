@@ -1,55 +1,32 @@
-S {
-  main = Header body
-  Header = kdefs ident Provides Returns Uses
-  Provides = kprovides kcolon klbracket ident+ krbracket
-  Returns = kreturns kcolon CrossProductType
-  Uses = kuses kcolon klbracket ident* krbracket
-
-  CrossProductType = klbrace ident+ krbrace
-  body = bodyClause+
-  bodyClause
-    = Var spaces
-    | Entry spaces
-    | Def spaces
-    | expression spaces
-
-  Var = kvar ident
-  Entry = kentry ident Params body
-  Def = kdef ident Params body
-  Let = klet klbracket ident expression krbracket kin expression
-  Cond = kcond klbrace ExpressionPair+ kelse expression krbrace
-  
-  expression
-   = klbrace body krbrace    -- compound
-   | Let
-   | Cond
-   | sexpr
-
-  sexpr
-  = NestedSexpr -- nested
-  | atom                         -- flat
-
-  NestedSexpr = klpar sexpr* krpar
-  ExpressionPair = expression expression
-  Params = klpar krpar -- empty
-         | klpar ident+ krpar -- args
-  atom = ident | string | gop
-
-
-  gop = kgt | kgt
-  string = dq (any)* dq
-  dq = kDQ
-  ident = identChar+  identChar = any
-  keyword = (kdefs | kprovides | kreturns | kuses | kvar 
-    | kentry | kdef | klet | kcond | kin)  ws = blank | tab | nl
-  blank = k 
-  tab = ktab
-  nl = knewline
-  bracket = dq | klbrace | krbrace | klpar | krpar | klbracket | krbracket | klt | kgt
-  separator = bracket | kcolon | space | end
-}
-
-
-
-
-
+S  { main [ Header     body] = [[ ${Header} ${   } ${body}]]
+Header [ kdefs ident Provides Returns Uses] = [[ ${kdefs} ${ident} ${Provides} ${Returns} ${Uses}]]
+Provides [ kprovides kcolon klbracket @ident krbracket] = [[ ${kprovides} ${kcolon} ${klbracket} ${ident} ${krbracket}]]
+Returns [ kreturns kcolon CrossProductType] = [[ ${kreturns} ${kcolon} ${CrossProductType}]]
+Uses [ kuses kcolon klbracket @ident krbracket] = [[ ${kuses} ${kcolon} ${klbracket} ${ident} ${krbracket}]]
+CrossProductType [ klbrace @ident krbrace] = [[ ${klbrace} ${ident} ${krbrace}]]
+body [ @bodyClause] = [[ ${bodyClause}]]
+bodyClause [ Var     spaces Entry     spaces Def     spaces expression spaces] = [[ ${Var} ${   } ${spaces} ${Entry} ${   } ${spaces} ${Def} ${   } ${spaces} ${expression} ${spaces}]]
+Var [ kvar ident] = [[ ${kvar} ${ident}]]
+Entry [ kentry ident Params body] = [[ ${kentry} ${ident} ${Params} ${body}]]
+Def [ kdef ident Params body] = [[ ${kdef} ${ident} ${Params} ${body}]]
+Let [ klet klbracket ident expression krbracket kin expression] = [[ ${klet} ${klbracket} ${ident} ${expression} ${krbracket} ${kin} ${expression}]]
+Cond [ kcond klbrace @ExpressionPair kelse expression krbrace] = [[ ${kcond} ${klbrace} ${ExpressionPair} ${kelse} ${expression} ${krbrace}]]
+expression [ klbrace body krbrace Let     Cond     sexpr] = [[ ${klbrace} ${body} ${krbrace} ${Let} ${   } ${Cond} ${   } ${sexpr}]]
+sexpr [ NestedSexpr     atom] = [[ ${NestedSexpr} ${   } ${atom}]]
+NestedSexpr [ klpar @sexpr krpar] = [[ ${klpar} ${sexpr} ${krpar}]]
+ExpressionPair [ kelse expression expression] = [[ ${kelse} ${expression} ${expression}]]
+Params [ klpar krpar klpar @ident krpar] = [[ ${klpar} ${krpar} ${klpar} ${ident} ${krpar}]]
+atom [ ident string gop] = [[ ${ident} ${string} ${gop}]]
+gop [ kgt= kgt] = [[ ${kgt=} ${kgt}]]
+string [ dq dq any @(      ) dq] = [[ ${dq} ${dq} ${any} ${(      )} ${dq}]]
+dq [ kdquote] = [[ ${kdquote}]]
+ident [ separator keyword @identChar separator] = [[ ${separator} ${keyword} ${identChar} ${separator}]]
+identChar [ separator ws any] = [[ ${separator} ${ws} ${any}]]
+keyword [ kdefs kprovides kreturns kuses kvar kentry kdef klet kcond kin (    |   |   |   |   |   |   |   |   |    ) separator] = [[ ${kdefs} ${kprovides} ${kreturns} ${kuses} ${kvar} ${kentry} ${kdef} ${klet} ${kcond} ${kin} ${(    |   |   |   |   |   |   |   |   |    )} ${separator}]]
+ws [ blank tab nl] = [[ ${blank} ${tab} ${nl}]]
+blank [ k ] = [[ ${k }]]
+tab [ ktag] = [[ ${ktag}]]
+nl [ knewline] = [[ ${knewline}]]
+bracket [ dq klbrace krbrace klpar krpar klbracket krbracket klt kgt] = [[ ${dq} ${klbrace} ${krbrace} ${klpar} ${krpar} ${klbracket} ${krbracket} ${klt} ${kgt}]]
+separator [ bracket kcolon space end] = [[ ${bracket} ${kcolon} ${space} ${end}]]
+ }
