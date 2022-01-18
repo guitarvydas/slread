@@ -29,7 +29,9 @@ S {
   = applySyntactic<NestedSexpr> -- nested
   | atom                         -- flat
 
-  NestedSexpr = "(" sexpr* ")"
+  NestedSexpr
+    = "(" "=?" sexpr* ")" -- chareq
+    | "(" sexpr* ")"      -- other
   ExpressionPair = ~"else" expression expression
   Params = "(" ")" -- empty
          | "(" ident+ ")" -- args
