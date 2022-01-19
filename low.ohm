@@ -1,0 +1,22 @@
+lowLevel {
+main = token+
+token = string | name | bracket | ws | nl | any
+string = dq stringChar* dq
+stringChar = "\n" | "\t" | notDQ
+notDQ = ~dq any
+dq = "\""
+
+name = nameFirst nameRest*
+nameFirst = letter | "_"
+nameRest = digit | "/" | nameFirst
+
+bracket = "{" | "}" | "(" | ")" | "[" | "]" | "<" | ">"
+
+ws = wschar+
+wschar = " " | nl | "\t"
+
+comment = "//" commentText* eol
+commentText = ~eol any
+nl = "\n"
+eol = nl | end
+}

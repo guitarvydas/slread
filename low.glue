@@ -1,0 +1,20 @@
+main [@tokens] = [[${tokens}]]
+token [token] = [[${token}]]
+string [dq1 @cs dq2 ] = [[\n@string ${dq1}${cs}${dq1}\n]]
+stringChar [c] = [[${c}]]
+notDQ [c] = [[${c}]]
+dq [c] = [[${c}]]
+
+name [nameFirst @nameRest] = [[\n@name ${nameFirst}${nameRest}\n]]
+nameFirst [c] = [[${c}]]
+nameRest [c] = [[${c}]]
+
+bracket [c] = [[\n@bracket ${c}\n]]
+
+ws [@cs] = [[\n@ws ${cs}\n]]
+wschar [c] = [[${c}]]
+
+comment [kss @cs eol] = [[${kss}${cs}${eol}]]
+commentText [any] = [[${any}]]
+nl [c] = [[\n@nl ${c}\n]]
+eol [c] = [[${c}]]
